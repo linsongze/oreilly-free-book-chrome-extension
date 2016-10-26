@@ -1,0 +1,11 @@
+{
+  "name": "Open oreilly's free book!",
+  "description": "Open oreilly's free book!",
+  "version": "1.0",
+  "background": { "scripts": ["background.js"] },
+  "permissions": ["tabs"],
+  "browser_action": {
+      "name": "Open oreilly's free book!"
+  },
+  "manifest_version": 2
+}
