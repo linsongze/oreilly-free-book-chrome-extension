@@ -6,21 +6,23 @@ var bk =  chrome.extension.getBackgroundPage();
 var url = "";
 var filename = null;
 var downloadUrl = null;
+var booksUrl = "";
 function updateInfo(url){
-	filename = checkUrlAndExtractName(url);
-	if(filename == null ){
+	var result = checkUrlAndExtractName(url);
+	if(result == null || result[1]==null){
 		chrome.browserAction.setIcon({path:"icon.png"});
 	}else{
+		filename = result[1];
 		chrome.browserAction.setIcon({path:"icon_download.png"});
-		downloadUrl = "http://www.oreilly.com/programming/free/files/"+filename+".pdf";
+		downloadUrl = result[0]+"/files/"+filename+".pdf";
 	}
-	
+	bk.console.log(result);
 }
 function checkUrlAndExtractName(url){
-	var reg = /http:\/\/www\.oreilly\.com\/programming\/free\/([^\/]+)\.csp/;
+	var reg = /(http:\/\/www\.oreilly\.com\/[^\/]+\/free\/)([^\/]+)\.csp/;
 	var r = "";
 	while(r = reg.exec(url)){
-		return r[1];
+		return [r[1],r[2]];
 	}
 	return null;
 }
@@ -31,7 +33,7 @@ function clickIconAction() {
 	if(filename != null){
 		chrome.tabs.create({url :downloadUrl},function(){});
 	}
-  
+	
 }
 
 chrome.browserAction.onClicked.addListener(clickIconAction);
